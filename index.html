@@ -9,7 +9,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@700&family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Caveat:wght@700&family=Cinzel:wght@500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
     <!-- FontAwesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Canvas Confetti -->
@@ -42,9 +42,10 @@
     </script>
 
     <style>
-        /* 3D Flip Card Effect */
+        /* 3D Flip Card Effect with Webkit prefixes for absolute iOS/Android stability */
         .card-container {
             perspective: 2000px;
+            -webkit-perspective: 2000px;
         }
         .card-inner {
             position: relative;
@@ -52,20 +53,24 @@
             height: 100%;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
+            -webkit-transform-style: preserve-3d;
         }
         .card-inner.is-flipped {
             transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
         }
         .card-front, .card-back {
             position: absolute;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             border-radius: 1rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.3), 0 10px 20px -10px rgba(0, 0, 0, 0.2);
         }
         .card-back {
             transform: rotateY(180deg);
+            -webkit-transform: rotateY(180deg);
         }
 
         /* Postcard Paper Texture */
@@ -76,7 +81,7 @@
                 radial-gradient(rgba(0,0,0,0.02) 1px, transparent 0);
             background-size: 8px 8px;
             background-position: 0 0, 4px 4px;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.04);
+            box-shadow: inset 0 0 30px rgba(0,0,0,0.03);
         }
 
         /* Signature Animation */
@@ -84,30 +89,30 @@
             font-family: 'Alex Brush', cursive;
             display: inline-block;
             opacity: 0;
-            transform: translateY(10px);
-            transition: opacity 1.5s ease, transform 1.5s ease;
+            transform: translateY(8px);
+            transition: opacity 1.2s ease, transform 1.2s ease;
         }
         .card-inner.is-flipped .animated-signature {
             opacity: 1;
             transform: translateY(0);
-            transition-delay: 0.6s;
+            transition-delay: 0.5s;
         }
 
         /* Handwritten Pen stroke effect on active state */
         .signature-line {
-            stroke-dasharray: 100;
-            stroke-dashoffset: 100;
-            transition: stroke-dashoffset 2s ease-in-out;
+            stroke-dasharray: 120;
+            stroke-dashoffset: 120;
+            transition: stroke-dashoffset 1.8s ease-in-out;
         }
         .card-inner.is-flipped .signature-line {
             stroke-dashoffset: 0;
-            transition-delay: 1.2s;
+            transition-delay: 1s;
         }
 
-        /* Floating elements background */
+        /* Floating elements background atmospheric glow */
         .glow-orb {
-            filter: blur(120px);
-            opacity: 0.35;
+            filter: blur(100px);
+            opacity: 0.25;
             mix-blend-mode: plus-lighter;
         }
 
@@ -122,11 +127,13 @@
             }
             .card-container {
                 perspective: none;
+                -webkit-perspective: none;
                 width: 100% !important;
                 height: auto !important;
             }
             .card-inner {
                 transform: none !important;
+                -webkit-transform: none !important;
                 display: flex;
                 flex-direction: column;
                 gap: 2rem;
@@ -134,7 +141,9 @@
             .card-front, .card-back {
                 position: relative !important;
                 transform: none !important;
+                -webkit-transform: none !important;
                 backface-visibility: visible !important;
+                -webkit-backface-visibility: visible !important;
                 box-shadow: none !important;
                 border: 1px solid #ddd !important;
                 page-break-after: always;
@@ -146,99 +155,99 @@
 <body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between overflow-x-hidden font-sans relative antialiased selection:bg-amber-500 selection:text-slate-900">
 
     <!-- Glowing Background Atmosphere -->
-    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-tr from-amber-600/30 to-rose-600/10 glow-orb pointer-events-none"></div>
-    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-bl from-indigo-900/40 to-teal-900/10 glow-orb pointer-events-none"></div>
+    <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-tr from-amber-600/20 to-rose-600/10 glow-orb pointer-events-none"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-gradient-to-bl from-indigo-900/30 to-teal-900/10 glow-orb pointer-events-none"></div>
 
     <!-- Header Navigation Bar -->
-    <header class="no-print w-full py-6 px-8 flex justify-between items-center z-10 border-b border-white/5 backdrop-blur-md bg-slate-950/40">
+    <header class="no-print w-full py-4 sm:py-6 px-4 sm:px-8 flex justify-between items-center z-10 border-b border-white/5 backdrop-blur-md bg-slate-950/40">
         <div class="flex items-center gap-3">
-            <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
-                <i class="fa-solid fa-envelope-open-text text-white text-lg"></i>
+            <div class="h-9 w-9 sm:h-10 sm:w-10 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                <i class="fa-solid fa-envelope-open-text text-white text-base sm:text-lg"></i>
             </div>
             <div>
-                <span class="font-bold tracking-tight text-white block">Farewell, Sabrine</span>
-                <span class="text-xs text-slate-400 font-medium">A Token of Everlasting Gratitude</span>
+                <span class="font-bold text-sm sm:text-base tracking-tight text-white block">Farewell, Sabrine</span>
+                <span class="text-[10px] sm:text-xs text-slate-400 font-medium">A Token of Everlasting Gratitude</span>
             </div>
         </div>
-        <div class="flex items-center gap-3">
-            <button onclick="triggerConfetti()" class="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition duration-300 text-amber-400 hover:scale-105" title="Celebrate with Confetti">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <div class="flex items-center gap-2">
+            <button onclick="triggerConfetti()" class="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition duration-300 text-amber-400 hover:scale-105" title="Celebrate with Confetti">
+                <i class="fa-solid fa-wand-magic-sparkles text-sm sm:text-base"></i>
             </button>
-            <button onclick="window.print()" class="p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition duration-300 text-slate-300 hover:scale-105" title="Export / Print Postcard">
-                <i class="fa-solid fa-print"></i>
+            <button onclick="window.print()" class="p-2 sm:p-2.5 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 transition duration-300 text-slate-300 hover:scale-105" title="Export / Print Postcard">
+                <i class="fa-solid fa-print text-sm sm:text-base"></i>
             </button>
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <main class="flex-grow flex flex-col items-center justify-center px-4 py-8 z-10">
+    <main class="flex-grow flex flex-col items-center justify-center px-4 py-4 sm:py-8 z-10 w-full max-w-4xl mx-auto">
         
         <!-- Helpful Tooltip Banner -->
-        <div class="no-print mb-6 text-center">
-            <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-medium text-slate-300 shadow-sm animate-pulse">
-                <i class="fa-solid fa-rotate text-amber-400"></i> Click the card or button below to flip and read the letter
+        <div class="no-print mb-4 sm:mb-6 text-center">
+            <span class="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] sm:text-xs font-medium text-slate-300 shadow-sm animate-pulse">
+                <i class="fa-solid fa-rotate text-amber-400"></i> Tap the card to flip and read the letter
             </span>
         </div>
 
-        <!-- 3D Card Interactive Zone -->
-        <div class="card-container w-full max-w-[850px] aspect-[8/5] min-h-[480px] sm:min-h-[520px] md:min-h-[550px] cursor-pointer" onclick="flipCard()">
+        <!-- 3D Card Interactive Zone (Responsive Aspect Ratio: Vertical on mobile, horizontal on desktop) -->
+        <div class="card-container w-full aspect-[5/7.2] md:aspect-[8/5] min-h-[500px] sm:min-h-[520px] md:min-h-[480px] lg:min-h-[520px] cursor-pointer" onclick="flipCard()">
             <div id="postcard" class="card-inner">
                 
                 <!-- FRONT OF POSTCARD (Elegant Premium Cover) -->
-                <div class="card-front bg-gradient-to-br from-slate-900 via-slate-950 to-neutral-900 border border-white/10 p-8 flex flex-col justify-between overflow-hidden relative">
+                <div class="card-front bg-gradient-to-br from-slate-900 via-slate-950 to-neutral-900 border border-white/10 p-5 sm:p-8 flex flex-col justify-between overflow-hidden relative">
                     <!-- Geometric Frame Decoration -->
-                    <div class="absolute inset-4 border border-white/5 rounded-lg pointer-events-none"></div>
-                    <div class="absolute inset-5 border border-amber-500/15 rounded-lg pointer-events-none"></div>
+                    <div class="absolute inset-3 sm:inset-4 border border-white/5 rounded-lg pointer-events-none"></div>
+                    <div class="absolute inset-4 sm:inset-5 border border-amber-500/15 rounded-lg pointer-events-none"></div>
                     
                     <!-- Decorative Art Patterns -->
                     <div class="absolute -top-16 -right-16 w-48 h-48 bg-gradient-to-br from-amber-500/10 to-transparent rounded-full blur-2xl"></div>
                     <div class="absolute -bottom-16 -left-16 w-48 h-48 bg-gradient-to-tr from-rose-500/10 to-transparent rounded-full blur-2xl"></div>
 
                     <!-- Header Segment -->
-                    <div class="flex justify-between items-start z-10">
-                        <div class="uppercase tracking-[0.25em] text-xs font-semibold text-amber-500/80">Memories of Leadership & Kindness</div>
-                        <div class="text-right text-xs text-slate-500 font-mono">July 2026</div>
+                    <div class="flex justify-between items-start z-10 w-full">
+                        <div class="uppercase tracking-[0.2em] text-[10px] font-semibold text-amber-500/80">Memories of Leadership & Kindness</div>
+                        <div class="text-right text-[10px] text-slate-500 font-mono">July 2026</div>
                     </div>
 
                     <!-- Center Masterpiece Title -->
-                    <div class="text-center my-auto py-6 z-10">
-                        <h2 class="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-rose-200 tracking-wide font-bold mb-3">
+                    <div class="text-center my-auto py-4 sm:py-6 z-10">
+                        <h2 class="font-cinzel text-2xl sm:text-4xl md:text-4xl lg:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-amber-100 via-amber-300 to-rose-200 tracking-wide font-bold mb-2 sm:mb-3">
                             Thank You, Sabrine
                         </h2>
-                        <div class="h-[1px] w-36 bg-gradient-to-r from-transparent via-amber-500/60 to-transparent mx-auto my-4"></div>
-                        <p class="font-serif italic text-slate-300 text-sm md:text-base tracking-widest max-w-md mx-auto leading-relaxed">
+                        <div class="h-[1px] w-28 sm:w-36 bg-gradient-to-r from-transparent via-amber-500/60 to-transparent mx-auto my-3 sm:my-4"></div>
+                        <p class="font-serif italic text-slate-300 text-xs sm:text-sm md:text-base tracking-widest max-w-sm sm:max-w-md mx-auto leading-relaxed px-2">
                             "To an extraordinary manager, dedicated mentor, and an inspiring guiding light."
                         </p>
                     </div>
 
                     <!-- Footer Details -->
-                    <div class="flex justify-between items-end z-10 border-t border-white/5 pt-4">
-                        <div class="flex items-center gap-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
-                            <span class="text-xs tracking-wider text-slate-400 font-medium">With Sincerest Gratitude</span>
+                    <div class="flex justify-between items-end z-10 border-t border-white/5 pt-3 sm:pt-4 w-full">
+                        <div class="flex items-center gap-1.5">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span>
+                            <span class="text-[10px] tracking-wider text-slate-400 font-medium">With Sincerest Gratitude</span>
                         </div>
-                        <div class="text-xs text-slate-500 flex items-center gap-1.5 hover:text-amber-400 transition">
-                            <span>Flip to Read Message</span>
-                            <i class="fa-solid fa-arrow-right animate-bounce-horizontal"></i>
+                        <div class="text-[10px] text-slate-400 flex items-center gap-1 hover:text-amber-400 transition font-medium">
+                            <span>Tap to Flip</span>
+                            <i class="fa-solid fa-arrow-right text-[9px] animate-bounce-horizontal"></i>
                         </div>
                     </div>
                 </div>
 
-                <!-- BACK OF POSTCARD (Warm letter layout with realistic textured paper) -->
-                <div class="card-back paper-bg border-4 border-double border-stone-200 p-6 md:p-8 flex flex-col md:flex-row gap-6 md:gap-8 justify-between text-stone-800 relative shadow-inner">
+                <!-- BACK OF POSTCARD (Warm letter layout with responsive columns) -->
+                <div class="card-back paper-bg border-4 border-double border-stone-200 p-4 sm:p-6 md:p-8 flex flex-col md:flex-row gap-4 sm:gap-6 md:gap-8 justify-between text-stone-800 relative overflow-hidden">
                     
                     <!-- Left Side: Warm Letter Message -->
-                    <div class="flex-1 flex flex-col justify-between">
+                    <div class="flex-1 flex flex-col justify-between h-full min-h-0">
                         <!-- Salutation -->
-                        <div class="mb-3">
-                            <h3 class="font-serif font-bold text-xl md:text-2xl text-stone-900 border-b border-stone-300/60 pb-2 flex items-center justify-between">
+                        <div class="mb-2 sm:mb-3">
+                            <h3 class="font-serif font-bold text-lg sm:text-xl md:text-2xl text-stone-900 border-b border-stone-300/60 pb-1 flex items-center justify-between">
                                 <span>Dear Sabrine,</span>
-                                <i class="fa-solid fa-envelope-open text-amber-600/30 text-sm"></i>
+                                <i class="fa-solid fa-envelope-open text-amber-600/30 text-xs sm:text-sm"></i>
                             </h3>
                         </div>
 
                         <!-- Core Message Body -->
-                        <div class="font-sans text-[13px] md:text-sm leading-relaxed text-stone-700 font-medium space-y-3 pr-2 text-justify">
+                        <div class="font-sans text-[11px] sm:text-xs md:text-sm leading-relaxed text-stone-700 font-medium space-y-2.5 sm:space-y-3 pr-1 text-justify overflow-y-auto max-h-[220px] sm:max-h-[250px] md:max-h-none">
                             <p>
                                 It’s hard to believe it’s already been a year and a half since we started working together. Thank you so much for your endless kindness, your patience, and for being there for me through absolutely everything.
                             </p>
@@ -254,19 +263,19 @@
                         <div class="hidden md:block absolute top-[15%] bottom-[15%] left-1/2 w-[1px] bg-stone-300/80 pointer-events-none"></div>
 
                         <!-- Sincerely/Sign-off -->
-                        <div class="mt-4 pt-2 border-t border-stone-200/50">
-                            <span class="block text-xs uppercase tracking-wider text-stone-500 font-semibold italic">With all my gratitude and respect,</span>
+                        <div class="mt-3 sm:mt-4 pt-2 border-t border-stone-200/50">
+                            <span class="block text-[10px] sm:text-xs uppercase tracking-wider text-stone-500 font-semibold italic">With all my gratitude and respect,</span>
                         </div>
                     </div>
 
                     <!-- Right Side: Virtual Stamp & Cool Signature & Addressee details -->
-                    <div class="w-full md:w-5/12 flex flex-col justify-between items-stretch pl-0 md:pl-4">
+                    <div class="h-auto md:h-full w-full md:w-5/12 flex flex-col justify-between items-stretch pl-0 md:pl-4 border-t md:border-t-0 border-stone-200/80 pt-3 md:pt-0">
                         
                         <!-- Top Row: Stamp & Postmark elements -->
-                        <div class="flex justify-between items-start">
+                        <div class="flex justify-between items-center md:items-start">
                             <!-- Postmark Stamp Badge -->
-                            <div class="relative w-20 h-20 flex-shrink-0">
-                                <svg class="absolute inset-0 w-full h-full text-blue-900/30" viewBox="0 0 100 100">
+                            <div class="relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 flex-shrink-0">
+                                <svg class="absolute inset-0 w-full h-full text-blue-900/25" viewBox="0 0 100 100">
                                     <circle cx="50" cy="50" r="42" fill="none" stroke="currentColor" stroke-width="1.5" stroke-dasharray="4 2"/>
                                     <circle cx="50" cy="50" r="35" fill="none" stroke="currentColor" stroke-width="1"/>
                                     <text x="50" y="32" font-family="'Cinzel', serif" font-size="6" font-weight="bold" fill="currentColor" text-anchor="middle">FArewell</text>
@@ -278,49 +287,49 @@
                             </div>
 
                             <!-- Premium Visual Postcard Stamp -->
-                            <div class="w-24 h-28 border-4 border-dashed border-stone-300 p-1.5 bg-white shadow-md transform rotate-3 hover:rotate-0 transition duration-300 flex flex-col justify-between">
-                                <div class="bg-gradient-to-tr from-amber-100 to-rose-100 w-full h-full p-1.5 flex flex-col justify-between items-center text-center relative overflow-hidden border border-stone-100">
+                            <div class="w-18 h-22 sm:w-20 sm:h-24 md:w-24 md:h-28 border-2 sm:border-4 border-dashed border-stone-300 p-1 bg-white shadow-md transform rotate-3 hover:rotate-0 transition duration-300 flex flex-col justify-between">
+                                <div class="bg-gradient-to-tr from-amber-100 to-rose-100 w-full h-full p-1 sm:p-1.5 flex flex-col justify-between items-center text-center relative overflow-hidden border border-stone-100">
                                     <div class="absolute -top-6 -right-6 w-12 h-12 bg-amber-400/20 rounded-full blur-md"></div>
-                                    <span class="text-[7px] uppercase tracking-wider text-amber-800 font-bold block">Official Post</span>
+                                    <span class="text-[6px] sm:text-[7px] uppercase tracking-wider text-amber-800 font-bold block">Official Post</span>
                                     <!-- Beautiful Minimalist Icon representing new horizons -->
-                                    <i class="fa-solid fa-paper-plane text-amber-600 my-auto text-xl animate-bounce"></i>
+                                    <i class="fa-solid fa-paper-plane text-amber-600 my-auto text-sm sm:text-base md:text-xl animate-bounce"></i>
                                     <div class="w-full flex justify-between items-end border-t border-stone-200/40 pt-1">
-                                        <span class="text-[6px] font-mono text-stone-500">2026</span>
-                                        <span class="text-[7px] font-bold text-amber-700">1.5 YRS</span>
+                                        <span class="text-[5px] sm:text-[6px] font-mono text-stone-500">2026</span>
+                                        <span class="text-[6px] sm:text-[7px] font-bold text-amber-700">1.5 YRS</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Mid Row: Fake Hand-written Address Grid representing professional fields -->
-                        <div class="space-y-3 my-6 border-t border-stone-200/50 pt-4">
-                            <div class="border-b border-stone-300/80 pb-1 text-xs text-stone-400 flex items-center justify-between">
+                        <div class="space-y-2 my-2 sm:my-4 md:my-6 border-t border-stone-200/50 pt-2 sm:pt-4 hidden sm:block">
+                            <div class="border-b border-stone-300/80 pb-0.5 text-[10px] text-stone-400 flex items-center justify-between">
                                 <span class="font-bold">To:</span>
                                 <span class="text-stone-700 font-serif font-semibold italic">An Inspiring Mentor</span>
                             </div>
-                            <div class="border-b border-stone-300/80 pb-1 text-xs text-stone-400">
-                                <span class="font-bold text-stone-700">Sabrine</span>
+                            <div class="border-b border-stone-300/80 pb-0.5 text-[10px] text-stone-700 font-medium">
+                                Sabrine
                             </div>
-                            <div class="border-b border-stone-300/80 pb-1 text-xs text-stone-400">
-                                <span class="font-bold text-stone-700">The Best Manager & Leader</span>
+                            <div class="border-b border-stone-300/80 pb-0.5 text-[10px] text-stone-700 font-medium">
+                                The Best Manager & Leader
                             </div>
                         </div>
 
                         <!-- Bottom Row: The Cool Animated Signature Area -->
-                        <div class="relative text-right flex flex-col items-end pt-2">
+                        <div class="relative text-right flex flex-col items-end pt-1 md:pt-2">
                             <!-- Cool Signature Container -->
-                            <div class="relative inline-block pr-4">
+                            <div class="relative inline-block pr-2">
                                 <!-- Actual cursive signature style -->
-                                <span class="animated-signature text-blue-800 font-signature text-4xl select-none relative z-10 leading-none">
+                                <span class="animated-signature text-blue-800 font-signature text-3xl sm:text-4xl select-none relative z-10 leading-none">
                                     Hamza Chebbi
                                 </span>
                                 
                                 <!-- Cool dynamic custom SVG flourish representing pen strokes -->
-                                <svg class="absolute -bottom-2.5 left-0 w-full h-4 text-blue-700 z-0 pointer-events-none" viewBox="0 0 160 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M5 12C35 4 105 3 155 10C125 15 65 18 35 14C55 10 115 8 145 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="signature-line"/>
+                                <svg class="absolute -bottom-2 left-0 w-full h-3 text-blue-700 z-0 pointer-events-none" viewBox="0 0 160 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M5 12C35 4 105 3 155 10C125 15 65 18 35 14C55 10 115 8 145 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="signature-line"/>
                                 </svg>
                             </div>
-                            <span class="text-[10px] uppercase tracking-widest text-stone-400 font-bold mt-1.5 pr-5">Hamza Chebbi</span>
+                            <span class="text-[9px] uppercase tracking-widest text-stone-400 font-bold mt-1.5 pr-3">Hamza Chebbi</span>
                         </div>
 
                     </div>
@@ -330,16 +339,16 @@
         </div>
 
         <!-- Action Control Buttons -->
-        <div class="no-print mt-10 flex flex-wrap gap-4 justify-center">
-            <button onclick="flipCard()" class="px-6 py-3 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold tracking-wide text-sm flex items-center gap-2 shadow-lg shadow-amber-500/20 transform transition duration-200 active:scale-95">
+        <div class="no-print mt-6 sm:mt-10 flex flex-wrap gap-3 sm:gap-4 justify-center w-full">
+            <button onclick="flipCard()" class="flex-1 sm:flex-initial px-5 py-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-semibold tracking-wide text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20 transform transition duration-200 active:scale-95">
                 <i class="fa-solid fa-arrows-rotate"></i>
                 <span>Flip Postcard</span>
             </button>
-            <button onclick="triggerConfetti()" class="px-6 py-3 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-slate-200 font-semibold tracking-wide text-sm flex items-center gap-2 transform transition duration-200 active:scale-95">
+            <button onclick="triggerConfetti()" class="flex-1 sm:flex-initial px-5 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/20 text-slate-200 font-semibold tracking-wide text-xs sm:text-sm flex items-center justify-center gap-2 transform transition duration-200 active:scale-95">
                 <i class="fa-solid fa-gift text-rose-500"></i>
                 <span>Celebrate</span>
             </button>
-            <button onclick="window.print()" class="px-6 py-3 rounded-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold tracking-wide text-sm flex items-center gap-2 transform transition duration-200 active:scale-95 shadow-lg shadow-indigo-600/20">
+            <button onclick="window.print()" class="w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold tracking-wide text-xs sm:text-sm flex items-center justify-center gap-2 transform transition duration-200 active:scale-95 shadow-lg shadow-indigo-600/20">
                 <i class="fa-solid fa-download"></i>
                 <span>Print or Save PDF</span>
             </button>
@@ -347,7 +356,7 @@
     </main>
 
     <!-- Footer Segment -->
-    <footer class="no-print py-6 text-center text-xs text-slate-500 border-t border-white/5 backdrop-blur-md bg-slate-950/40 w-full">
+    <footer class="no-print py-4 sm:py-6 text-center text-[10px] sm:text-xs text-slate-500 border-t border-white/5 backdrop-blur-md bg-slate-950/40 w-full px-4">
         <p>© 2026 Crafted with respect & gratitude for Sabrine. Print this card on textured paper for the best physical touch.</p>
     </footer>
 
@@ -362,9 +371,9 @@
             if(card.classList.contains('is-flipped')) {
                 setTimeout(() => {
                     confetti({
-                        particleCount: 80,
-                        spread: 60,
-                        origin: { y: 0.8 },
+                        particleCount: 60,
+                        spread: 50,
+                        origin: { y: 0.85 },
                         colors: ['#f59e0b', '#f43f5e', '#ffffff', '#3b82f6']
                     });
                 }, 400);
@@ -373,22 +382,22 @@
 
         // Dedicated Confetti celebration launcher
         function triggerConfetti() {
-            var duration = 3 * 1000;
+            var duration = 2.5 * 1000;
             var end = Date.now() + duration;
 
             (function frame() {
                 confetti({
-                    particleCount: 4,
+                    particleCount: 3,
                     angle: 60,
                     spread: 55,
-                    origin: { x: 0 },
+                    origin: { x: 0, y: 0.8 },
                     colors: ['#fbbf24', '#f43f5e', '#3b82f6']
                 });
                 confetti({
-                    particleCount: 4,
+                    particleCount: 3,
                     angle: 120,
                     spread: 55,
-                    origin: { x: 1 },
+                    origin: { x: 1, y: 0.8 },
                     colors: ['#fbbf24', '#f43f5e', '#3b82f6']
                 });
 
@@ -402,11 +411,11 @@
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 confetti({
-                    particleCount: 50,
-                    spread: 70,
-                    origin: { y: 0.8 }
+                    particleCount: 40,
+                    spread: 60,
+                    origin: { y: 0.85 }
                 });
-            }, 800);
+            }, 600);
         });
     </script>
 </body>
