@@ -38,7 +38,7 @@
     </script>
 
     <style>
-        /* 3D Flip Card Effect with Webkit prefixes for absolute iOS/Android stability */
+        /* 3D Flip Card Effect with Webkit prefixes for absolute stability */
         .card-container {
             perspective: 2000px;
             -webkit-perspective: 2000px;
@@ -46,7 +46,6 @@
         .card-inner {
             position: relative;
             width: 100%;
-            height: 100%;
             transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform-style: preserve-3d;
             -webkit-transform-style: preserve-3d;
@@ -57,6 +56,8 @@
         }
         .card-front, .card-back {
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             backface-visibility: hidden;
@@ -121,7 +122,7 @@
             .no-print {
                 display: none !important;
             }
-            .card-container {
+            .card-container, .card-inner {
                 perspective: none;
                 -webkit-perspective: none;
                 width: 100% !important;
@@ -181,10 +182,10 @@
             </span>
         </div>
 
-        <div class="card-container w-full h-[520px] max-w-[360px] md:max-w-full md:h-auto md:aspect-[8/5] cursor-pointer" onclick="flipCard(event)">
-            <div id="postcard" class="card-inner">
+        <div class="card-container w-full max-w-[360px] md:max-w-full md:aspect-[8/5]">
+            <div id="postcard" class="card-inner h-[520px] md:h-full cursor-pointer" onclick="flipCard(event)">
                 
-                <div class="card-front bg-gradient-to-br from-slate-900 via-slate-950 to-neutral-900 border border-white/10 p-5 sm:p-8 flex flex-col justify-between overflow-hidden relative">
+                <div class="card-front bg-gradient-to-br from-slate-900 via-slate-950 to-neutral-900 border border-white/10 p-5 sm:p-8 flex flex-col justify-between overflow-hidden">
                     <div class="absolute inset-3 sm:inset-4 border border-white/5 rounded-lg pointer-events-none"></div>
                     <div class="absolute inset-4 sm:inset-5 border border-amber-500/15 rounded-lg pointer-events-none"></div>
                     
@@ -218,7 +219,7 @@
                     </div>
                 </div>
 
-                <div class="card-back paper-bg border-4 border-double border-stone-200 p-4 sm:p-6 md:p-8 flex flex-col md:flex-row gap-3 md:gap-8 justify-between text-stone-800 relative overflow-hidden">
+                <div class="card-back paper-bg border-4 border-double border-stone-200 p-4 sm:p-6 md:p-8 flex flex-col md:flex-row gap-3 md:gap-8 justify-between text-stone-800 overflow-hidden">
                     
                     <div class="flex-grow flex flex-col justify-between min-h-0">
                         <div class="mb-1">
@@ -286,7 +287,7 @@
 
                         <div class="relative text-right flex flex-col items-end w-1/2 md:w-full justify-center md:justify-end pr-1">
                             <div class="relative inline-block">
-                                <span class="animated-signature text-blue-800 font-signature text-xl sm:text-4xl select-none relative z-10 leading-none">
+                                <span class="animated-signature text-blue-800 font-signature textxl sm:text-4xl select-none relative z-10 leading-none">
                                     Hamza Chebbi
                                 </span>
                                 <svg class="absolute -bottom-0.5 left-0 w-full h-1.5 text-blue-700 z-0 pointer-events-none" viewBox="0 0 160 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -326,7 +327,6 @@
     </footer>
 
     <script>
-        // Flip Card Interaction Handler
         function flipCard(event, forceFlip = false) {
             if (event && event.stopPropagation) {
                 if(!forceFlip && (event.target.tagName === 'BUTTON' || event.target.closest('button'))) {
@@ -337,7 +337,6 @@
             const card = document.getElementById('postcard');
             card.classList.toggle('is-flipped');
             
-            // If flipped to the back, trigger confetti
             if(card.classList.contains('is-flipped')) {
                 setTimeout(() => {
                     confetti({
@@ -350,7 +349,6 @@
             }
         }
 
-        // Dedicated Confetti celebration launcher
         function triggerConfetti(event) {
             if(event && event.stopPropagation) event.stopPropagation();
 
@@ -379,7 +377,6 @@
             }());
         }
 
-        // Auto trigger celebration elements on load
         window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 confetti({
